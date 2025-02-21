@@ -1,21 +1,41 @@
 // screens/AboutScreen.js
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
-import ContactCard from '../components/ContactCard';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import AboutCard from '../components/AboutCard';
+
+const delairImage = require('../assets/delair.png');
+const gabiImage = require('../assets/Gabi.jpg')
 
 const AboutScreen = () => {
-  const contacts = [
-    { id: 1, name: 'João Silva', email: 'joao.silva@ifmakers.com', phone: '(11) 99999-9999' },
-    { id: 2, name: 'Maria Souza', email: 'maria.souza@ifmakers.com', phone: '(11) 88888-8888' },
+  // Dados das pessoas (com links de imagens remotas)
+  const people = [
+    {
+      id: '1',
+      name: 'Delair Bavaresco',
+      role: 'Coordenador',
+      email: 'delair.bavaresco@ifrs.edu.com.br',
+      image: delairImage, // Link da imagem remota
+    },
+    {
+      id: '2',
+      name: 'Diego Lieban',
+      role: '',
+      email: 'diego.lieban@ifrs.edu.com.br',
+      image: 'https://exemplo.com/diego.jpg', // Link da imagem remota
+    },
+    {
+      id: '3',
+      name: 'Gabriele Batisti',
+      role: 'Estagiária',
+      email: 'gabriele.batisti@ifrs.edu.com',
+      image: gabiImage, // Link da imagem remota
+    },
   ];
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.history}>
-        O PIPA IFmakers é um projeto que visa incentivar a inovação e a criatividade entre os estudantes.
-      </Text>
-      {contacts.map((contact) => (
-        <ContactCard key={contact.id} contact={contact} />
+      {people.map((person) => (
+        <AboutCard key={person.id} person={person} />
       ))}
     </ScrollView>
   );
@@ -25,10 +45,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-  },
-  history: {
-    fontSize: 16,
-    marginBottom: 20,
+    backgroundColor: '#f8f8f8',
   },
 });
 

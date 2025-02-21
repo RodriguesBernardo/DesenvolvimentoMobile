@@ -1,65 +1,73 @@
 // screens/NewsDetailScreen.js
 import React from 'react';
-import { View, Text, Image, StyleSheet, Button, Alert } from 'react-native';
-import { deleteNews } from '../services/api';
+import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 
-const NewsDetailScreen = ({ route, navigation }) => {
-  const { news, isAdmin } = route.params; // Recebe a notícia e o estado isAdmin
-
-  // Função para deletar a notícia
-  const handleDelete = async () => {
-    try {
-      await deleteNews(news.id); // Remove a notícia da API
-      navigation.goBack(); // Volta para a tela anterior
-    } catch (error) {
-      Alert.alert('Erro', 'Não foi possível remover a notícia.');
-    }
-  };
+const NewsDetailScreen = ({ route }) => {
+  const { news } = route.params; // Recebe a notícia como parâmetro
 
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: news.image }} style={styles.image} />
-      <Text style={styles.title}>{news.title}</Text>
-      <Text style={styles.content}>{news.content}</Text>
-
-      {isAdmin && ( // Só mostra os botões se o admin estiver logado
-        <View style={styles.adminOptions}>
-          <Button
-            title="Editar"
-            onPress={() => navigation.navigate('EditNews', { news })}
-          />
-          <Button title="Remover" onPress={handleDelete} color="red" />
-        </View>
+    <ScrollView style={styles.container}>
+      {/* Imagem de fundo */}
+      {news.image && (
+        <Image source={{ uri: news.image }} style={styles.backgroundImage} />
       )}
-    </View>
+
+      {/* Overlay escuro para melhorar a legibilidade do texto */}
+      <View style={styles.overlay} />
+
+      {/* Conteúdo da notícia */}
+      <View style={styles.content}>
+        <Text style={styles.title}>{news.title}</Text>
+        <Text style={styles.fullContent}>{news.content}</Text>
+
+        {/* Informações adicionais (data e autor) */}
+        <View style={styles.metaContainer}>
+          {news.date && <Text style={styles.metaText}>Data: {news.date}</Text>}
+          {news.author && <Text style={styles.metaText}>Autor: {news.author}</Text>}
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
   },
-  image: {
+  backgroundImage: {
     width: '100%',
-    height: 200,
+    height: 300, // Altura fixa para a imagem de fundo
     resizeMode: 'cover',
-    borderRadius: 10,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  content: {
+    padding: 16,
+    position: 'relative',
+    zIndex: 1,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 10,
+    color: '#fff',
+    marginBottom: 16,
   },
-  content: {
+  fullContent: {
     fontSize: 16,
-    marginTop: 10,
-    color: '#555',
+    color: '#fff',
+    lineHeight: 24,
   },
-  adminOptions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
+  metaContainer: {
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.2)',
+    paddingTop: 16,
+  },
+  metaText: {
+    fontSize: 14,
+    color: '#ccc',
   },
 });
 

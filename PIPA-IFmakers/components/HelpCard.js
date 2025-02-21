@@ -1,11 +1,16 @@
 // components/HelpCard.js
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, Animated, StyleSheet } from 'react-native';
+import { PinchGestureHandler, State } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
-const HelpCard = ({ title, content }) => {
+const HelpCard = ({ title, content, image }) => {
   const [expanded, setExpanded] = useState(false);
   const [animation] = useState(new Animated.Value(0));
+  const navigation = useNavigation();
+  const lastPress = useRef(0); // Para detectar dois cliques
 
+  // Animação de expansão do card
   const toggleExpand = () => {
     const initialValue = expanded ? 1 : 0;
     const finalValue = expanded ? 0 : 1;
@@ -21,70 +26,100 @@ const HelpCard = ({ title, content }) => {
 
   const heightInterpolate = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [100, 250], // Altura inicial e final do card
+    outputRange: [100, 400], // Altura inicial e final do card
   });
 
-  const rotateInterpolate = animation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'], // Rotação do ícone de seta
-  });
+  // Função para detectar dois cliques
+  const handleDoubleClick = () => {
+    const now = new Date().getTime();
+    const DOUBLE_PRESS_DELAY = 300; // Tempo máximo entre dois cliques (em milissegundos)
+
+    if (now - lastPress.current < DOUBLE_PRESS_DELAY) {
+      navigation.navigate('HelpDetail', { item: { title, content, image } }); // Navega para a tela de detalhes
+    }
+
+    lastPress.current = now;
+  };
+
+  // Função para detectar gesto de pinça
+  const onPinchGestureEvent = ({ nativeEvent }) => {
+    if (nativeEvent.scale > 1.5) { // Se o zoom for maior que 1.5x
+      navigation.navigate('HelpDetail', { item: { title, content, image } }); // Navega para a tela de detalhes
+    }
+  };
 
   return (
-    <TouchableOpacity onPress={toggleExpand} activeOpacity={0.8}>
-      <Animated.View style={[styles.card, { height: heightInterpolate }]}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{title}</Text>
-          <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-            <Text style={styles.arrow}>▼</Text>
-          </Animated.View>
-        </View>
-        {expanded && (
-          <View style={styles.contentContainer}>
-            <Text style={styles.content}>{content}</Text>
+    <PinchGestureHandler
+      onGestureEvent={onPinchGestureEvent}
+      onHandlerStateChange={({ nativeEvent }) => {
+        if (nativeEvent.state === State.END && nativeEvent.scale > 1.5) {
+          navigation.navigate('HelpDetail', { item: { title, content, image } });
+        }
+      }}
+    >
+      <TouchableOpacity
+        onPress={toggleExpand}
+        onPressOut={handleDoubleClick} // Detecta dois cliques
+        activeOpacity={0.8}
+      >
+        <Animated.View style={[styles.card, { height: heightInterpolate }]}>
+          {/* Imagem de fundo */}
+          {image && <Image source={image} style={styles.backgroundImage} />}
+
+          {/* Overlay escuro para melhorar a legibilidade do texto */}
+          <View style={styles.overlay} />
+
+          {/* Conteúdo do card */}
+          <View style={styles.content}>
+            {/* Título (sempre visível) */}
+            <Text style={styles.title}>{title}</Text>
+
+            {/* Conteúdo expandido (aparece apenas quando expandido) */}
+            {expanded && (
+              <View style={styles.expandedContent}>
+                <Text style={styles.summary}>{content}</Text>
+              </View>
+            )}
           </View>
-        )}
-      </Animated.View>
-    </TouchableOpacity>
+        </Animated.View>
+      </TouchableOpacity>
+    </PinchGestureHandler>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 15,
     marginBottom: 10,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
+    position: 'relative',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  backgroundImage: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    resizeMode: 'cover',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  content: {
+    padding: 15,
+    position: 'relative',
+    zIndex: 1,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
   },
-  arrow: {
-    fontSize: 18,
-    color: '#6200ee',
-  },
-  contentContainer: {
+  expandedContent: {
     marginTop: 10,
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
   },
-  content: {
+  summary: {
     fontSize: 14,
-    color: '#555',
-    lineHeight: 20,
+    color: '#eee',
   },
 });
 
