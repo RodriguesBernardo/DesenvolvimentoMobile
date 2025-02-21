@@ -16,7 +16,7 @@ const HelpScreen = () => {
       id: 1,
       title: 'CNC Corte a Laser',
       content:
-        'A cortadora LASEer é uma ferramenta poderosa para cortes precisos. Aqui estão algumas dicas:\n\n' +
+        'A cortadora Laser é uma ferramenta poderosa para cortes precisos. Aqui estão algumas dicas:\n\n' +
         '1. Certifique-se de que o material esteja bem posicionado.\n' +
         '2. Configure a potência do laser de acordo com o material.\n' +
         '3. Use óculos de proteção ao operar o equipamento.',

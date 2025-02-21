@@ -16,3 +16,8 @@ npm install @react-navigation/native @react-navigation/bottom-tabs @react-naviga
 
 ### Rodar o projeto
 npx expo start
+
+
+# Falta fazer 
+
+- Na seção sobre, dividir em 2 partes, uma mostrando colaboraderes e outro descrevendo o pipa 
