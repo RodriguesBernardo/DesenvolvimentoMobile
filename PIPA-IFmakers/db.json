@@ -1,0 +1,31 @@
+{
+    "news": [
+      {
+        "id": "1",
+        "title": "Primeira Notícia",
+        "summary": "Resumo da primeira notícia.",
+        "content": "Conteúdo completo da primeira notícia. Aqui você pode adicionar mais detalhes sobre o que aconteceu.",
+        "image": "https://via.placeholder.com/150",
+        "date": "2023-10-15",
+        "author": "João Silva"
+      },
+      {
+        "id": "2",
+        "title": "Segunda Notícia",
+        "summary": "Resumo da segunda notícia.",
+        "content": "Conteúdo completo da segunda notícia. Aqui você pode adicionar mais detalhes sobre o que aconteceu.",
+        "image": "https://via.placeholder.com/150",
+        "date": "2023-10-16",
+        "author": "Maria Souza"
+      },
+      {
+        "id": "3",
+        "title": "Terceira Notícia",
+        "summary": "Resumo da terceira notícia.",
+        "content": "Conteúdo completo da terceira notícia. Aqui você pode adicionar mais detalhes sobre o que aconteceu.",
+        "image": "https://via.placeholder.com/150",
+        "date": "2023-10-17",
+        "author": "Carlos Oliveira"
+      }
+    ]
+  }
