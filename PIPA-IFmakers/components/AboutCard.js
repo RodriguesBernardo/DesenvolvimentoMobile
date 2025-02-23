@@ -1,4 +1,3 @@
-// components/AboutCard.js
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Animated, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -44,7 +43,7 @@ const AboutCard = ({ person }) => {
           <View style={styles.header}>
             <View>
               <Text style={styles.name}>{person.name}</Text>
-              <Text style={styles.role}>{person.role}</Text>
+              {person.role && <Text style={styles.role}>{person.role}</Text>}
             </View>
             <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
               <Ionicons name="chevron-down" size={24} color="#fff" />
@@ -54,6 +53,7 @@ const AboutCard = ({ person }) => {
           {/* Conteúdo expandido */}
           {expanded && (
             <View style={styles.contactContainer}>
+              {person.description && <Text style={styles.contactText}>{person.description}</Text>}
               {person.email && <Text style={styles.contactText}>Email: {person.email}</Text>}
               {person.phone && <Text style={styles.contactText}>Telefone: {person.phone}</Text>}
             </View>

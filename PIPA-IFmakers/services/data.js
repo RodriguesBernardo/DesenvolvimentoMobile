@@ -27,6 +27,33 @@ const newsData = [
       date: "2023-10-17",
       author: "Carlos Oliveira",
     },
+    {
+      id: "4",
+      title: "Terceira Notícia",
+      summary: "Resumo da terceira notícia.",
+      content: "Conteúdo completo da terceira notícia. Aqui você pode adicionar mais detalhes sobre o que aconteceu.",
+      image: imagemDefault,
+      date: "2023-10-17",
+      author: "Carlos Oliveira",
+    },
+    {
+      id: "5",
+      title: "Terceira Notícia",
+      summary: "Resumo da terceira notícia.",
+      content: "Conteúdo completo da terceira notícia. Aqui você pode adicionar mais detalhes sobre o que aconteceu.",
+      image: imagemDefault,
+      date: "2023-10-17",
+      author: "Carlos Oliveira",
+    },
+    {
+      id: "6",
+      title: "Terceira Notícia",
+      summary: "Resumo da terceira notícia.",
+      content: "Conteúdo completo da terceira notícia. Aqui você pode adicionar mais detalhes sobre o que aconteceu.",
+      image: imagemDefault,
+      date: "2023-10-17",
+      author: "Carlos Oliveira",
+    },
   ];
   
   export default newsData;
