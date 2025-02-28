@@ -27,3 +27,8 @@ npx expo start
 3. *Recursos Úteis*: Manuais, tutoriais e links importantes para auxiliar no uso dos recursos do PIPA.
 4. *Sobre o PIPA*: Informações sobre o projeto, sua equipe e objetivos.
 5. *Visitas*: Histórico de visitas estudantis, com fotos e descrições das atividades realizadas.
+
+# Técnologias Utilizadas
+- *React Native*: Framework para desenvolvimento de aplicativos.
+- *React Navigation*: Biblioteca para gerencimaneto de navegação entre telas
+- *Expo*: Plataforma que facilita o desenvolvimento e a publicação de aplicativos mobile
