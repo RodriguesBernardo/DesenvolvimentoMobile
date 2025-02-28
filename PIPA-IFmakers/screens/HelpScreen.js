@@ -20,7 +20,7 @@ const HelpScreen = () => {
         '1. Certifique-se de que o material esteja bem posicionado.\n' +
         '2. Configure a potência do laser de acordo com o material.\n' +
         '3. Use óculos de proteção ao operar o equipamento.',
-      image: cncLaserImage, // Use a variável importada
+      image: cncLaserImage,
     },
     {
       id: 2,
@@ -30,7 +30,7 @@ const HelpScreen = () => {
         '1. Escolha o filamento adequado para o seu projeto.\n' +
         '2. Calibre a mesa de impressão antes de começar.\n' +
         '3. Verifique a temperatura do bico e da mesa.',
-      image: impressora3DImage, // Use a variável importada
+      image: impressora3DImage,
     },
   ];
 
@@ -42,7 +42,7 @@ const HelpScreen = () => {
           title={item.title}
           content={item.content}
           image={item.image}
-          onDoubleClick={() => navigation.navigate('HelpDetail', { item })} // Navega para a tela de detalhes
+          onDoubleClick={() => navigation.navigate('HelpDetail', { item })}
         />
       ))}
     </ScrollView>

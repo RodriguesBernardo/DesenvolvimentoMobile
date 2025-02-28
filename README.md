@@ -18,6 +18,10 @@ npm install @react-navigation/native @react-navigation/bottom-tabs @react-naviga
 npx expo start
 
 
+### Atividades Feitas em Aula
+**[Atividades em Aula](_AtividadesAula)**
+
+
 # Falta fazer 
 
 - Na seção sobre, dividir em 2 partes, uma mostrando colaboraderes e outro descrevendo o pipa 
