@@ -1,54 +1,55 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image } from 'react-native';
 import AboutCard from '../components/AboutCard';
 
-const delairImage = require('../assets/delair.png');
-const gabiImage = require('../assets/Gabi.jpg');
-const pipaImage = 'https://ifrs.edu.br/bento/wp-content/uploads/sites/13/2021/09/capa-pipa-1.png';
+const pipaImage = require('../assets/pipa.png');
+const delairImage = require('../assets/colaboradores/delair.png');
+const diegoImage = require('../assets/pipa.png');
+const isadoraImage = require('../assets/pipa.png');
+const leonardoImage = require('../assets/pipa.png');
+const lucianaImage = require('../assets/pipa.png');
+const tiagoImage = require('../assets/pipa.png');
+const ronaldoImage = require('../assets/pipa.png');
+const shanaImage = require('../assets/pipa.png');
+const thiagoImage = require('../assets/pipa.png');
+const gabrieleImage = require('../assets/colaboradores/Gabi.jpg')
 
 const AboutScreen = () => {
-  // Dados sobre o PIPA
-  const pipaInfo = {
-    id: '0',
-    name: 'Sobre o PIPA',
-    description:
-      'O PIPA (Projeto Integrado de Pesquisa em Automação) é uma iniciativa do IFRS que visa promover a inovação e o desenvolvimento de soluções tecnológicas na área de automação industrial.',
-    image: pipaImage, // Imagem do PIPA
-  };
-
-  // Dados dos colaboradores
   const people = [
-    {
-      id: '1',
-      name: 'Delair Bavaresco',
-      role: 'Coordenador',
-      email: 'delair.bavaresco@ifrs.edu.com.br',
-      image: delairImage,
-    },
-    {
-      id: '2',
-      name: 'Diego Lieban',
-      role: '',
-      email: 'diego.lieban@ifrs.edu.com.br',
-      image: 'https://exemplo.com/diego.jpg',
-    },
-    {
-      id: '3',
-      name: 'Gabriele Batisti',
-      role: 'Estagiária',
-      email: 'gabriele.batisti@ifrs.edu.com',
-      image: gabiImage,
-    },
+    { id: '1', name: 'Gabriele Batisti', role: 'Estágiaria', email:'gabriele.batisti@ifrs.edu.br', image:gabrieleImage},
+    { id: '2', name: 'Delair Bavaresco', role: 'Matemática', email: 'delair.bavaresco@ifrs.edu.br', image: delairImage },
+    { id: '3', name: 'Diego Lieban', role: 'Matemática', email: 'diego.lieban@ifrs.edu.br', image: diegoImage },
+    { id: '4', name: 'Isadora Malicheski', role: 'Arquitetura', email: 'isadora.malicheski@ifrs.edu.br', image: isadoraImage },
+    { id: '5', name: 'Leonardo Cury', role: 'Viticultura', email: 'leonardo.cury@ifrs.edu.br', image: leonardoImage },
+    { id: '6', name: 'Luciana Bernd', role: 'Ciência de Alimentos', email: 'luciana.bernd@ifrs.edu.br', image: lucianaImage },
+    { id: '7', name: 'Tiago Nascimento', role: 'Física', email: 'tiago.nascimento@ifrs.edu.br', image: tiagoImage },
+    { id: '8', name: 'Ronaldo Serpa', role: 'Computação', email: 'ronaldo.serpa@ifrs.edu.br', image: ronaldoImage },
+    { id: '9', name: 'Shana Flores', role: 'Geografia', email: 'shana.flores@ifrs.edu.br', image: shanaImage },
+    { id: '10', name: 'Thiago Reis', role: 'Administração', email: 'thiago.reis@ifrs.edu.br', image: thiagoImage },
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Card sobre o PIPA */}
-      <AboutCard person={pipaInfo} />
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={true} // Alterado para true para depuração
+    >
+      <View style={styles.card}>
+        <Image source={pipaImage} style={styles.image} />
+        <Text style={styles.titulo}>Sobre o PIPA</Text>
+        <Text style={styles.descricao}>
+          O PIPA IFmakeRS surge de uma articulação de diversas iniciativas no IFRS, campus Bento Gonçalves, como uma proposta interdisciplinar que articula ações de ensino, pesquisa e extensão, utilizando a cultura maker como fio condutor.
+        </Text>
+        <Text style={styles.descricao}>
+          O nome “PIPA” faz referência à cultura local, simbolizando o barril de vinho, um dos principais produtos da região. Ao mesmo tempo, é um acrônimo para os pilares do projeto: Pesquisar, Inovar, Prototipar e Aprender.
+        </Text>
+        <Text style={styles.descricao}>
+          O projeto está localizado no Bloco de Convivência Acadêmica e conta com um laboratório equipado para atividades de prototipagem e inovação, incentivando o aprendizado criativo.
+        </Text>
+      </View>
 
-      {/* Seção dos colaboradores */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Colaboradores</Text>
+        <Text style={styles.sectionTitle}>Equipe</Text>
         {people.map((person) => (
           <AboutCard key={person.id} person={person} />
         ))}
@@ -60,8 +61,42 @@ const AboutScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
     backgroundColor: '#f8f8f8',
+  },
+  contentContainer: {
+    padding: 16,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    alignItems: 'center',
+  },
+  image: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 16,
+  },
+  titulo: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
+  },
+  descricao: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 22,
+    textAlign: 'justify',
+    marginBottom: 10,
   },
   section: {
     marginBottom: 20,

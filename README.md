@@ -6,9 +6,6 @@
 ### Instalar Expo CLI globalmente
 npm install -g expo-cli
 
-### Clonar o repositório
-git clone https://github.com/seu-usuario/DesenvolvimentoMobile.git
-cd DesenvolvimentoMobile
 
 ### Instalar dependências
 npm install
@@ -21,7 +18,12 @@ npx expo start
 ### Atividades Feitas em Aula
 **[Atividades em Aula](_AtividadesAula)**
 
+# Aplicativo PIPA IFMakeRS
+### *O PIPA IFMakerRS é um aplicativo desenvolvido para apoiar estudantes, professores e entusiastas da cultura maker no Instituto Federal do Rio Grande do Sul (IFRS), campus Bento Gonçalves. O projeto PIPA (Pesquisar, Inovar, Prototipar e Aprender) promove a integração de atividades de ensino, pesquisa e extensão, utilizando a cultura maker como fio condutor.*
 
-# Falta fazer 
-
-- Na seção sobre, dividir em 2 partes, uma mostrando colaboraderes e outro descrevendo o pipa 
+## Funcionalidades Principais:
+1. *Dicas Rápidas*: Acesso a dicas práticas para o uso de equipamentos como CNC a laser e impressoras 3D.
+2. *Contato*: Envio de e-mails para tirar dúvidas ou solicitar suporte.
+3. *Recursos Úteis*: Manuais, tutoriais e links importantes para auxiliar no uso dos recursos do PIPA.
+4. *Sobre o PIPA*: Informações sobre o projeto, sua equipe e objetivos.
+5. *Visitas*: Histórico de visitas estudantis, com fotos e descrições das atividades realizadas.

@@ -1,12 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Animated, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
-const HelpCards = ({ title, content, image }) => {
+const HelpCard = ({ title, content, image }) => {
   const [expanded, setExpanded] = useState(false);
   const [animation] = useState(new Animated.Value(0));
-  const navigation = useNavigation();
-  const lastPress = useRef(0); // Para detectar dois cliques
 
   // Animação de expansão do card
   const toggleExpand = () => {
@@ -28,44 +25,17 @@ const HelpCards = ({ title, content, image }) => {
     outputRange: [150, 400], // Altura inicial e final do card
   });
 
-  // Função para detectar dois cliques
-  const handleDoubleClick = () => {
-    const now = new Date().getTime();
-    const DOUBLE_PRESS_DELAY = 300; // Tempo máximo entre dois cliques (em milissegundos)
-
-    if (now - lastPress.current < DOUBLE_PRESS_DELAY) {
-      // Navega para a tela de detalhes com animação
-      Animated.timing(animation, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: false,
-      }).start(() => {
-        navigation.navigate('HelpDetail', { item: { title, content, image } });
-      });
-    }
-
-    lastPress.current = now;
-  };
-
   return (
     <TouchableOpacity
-      onPress={toggleExpand}
-      onPressOut={handleDoubleClick} // Detecta dois cliques
+      onPress={toggleExpand} // Expande/recolhe o card ao clicar
       activeOpacity={0.8}
     >
       <Animated.View style={[styles.card, { height: heightInterpolate }]}>
-        {/* Imagem de fundo */}
-        {image && <Image source={image} style={styles.backgroundImage} />}
-
-        {/* Overlay escuro para melhorar a legibilidade do texto */}
+        <Image source={image} style={styles.backgroundImage} />
         <View style={styles.overlay} />
-
-        {/* Conteúdo do card */}
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
-          {expanded && (
-            <Text style={styles.summary}>{content.substring(0, 100)}...</Text>
-          )}
+          {expanded && <Text style={styles.summary}>{content}</Text>}
         </View>
       </Animated.View>
     </TouchableOpacity>
@@ -106,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HelpCards;
+export default HelpCard;
