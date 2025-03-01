@@ -1,4 +1,4 @@
-# DesenvolvimentoMobile
+# Desenvolvimento Mobile
 ## Repositorio Destinado para publicação do material da cadeira de Desenvolvimento Mobile
 ***Por Bernardo Gostenski Rodrigues***
 
