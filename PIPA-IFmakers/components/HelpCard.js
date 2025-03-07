@@ -7,7 +7,6 @@ const HelpCard = ({ title, content, image }) => {
 
   // Animação de expansão do card
   const toggleExpand = () => {
-    const initialValue = expanded ? 1 : 0;
     const finalValue = expanded ? 0 : 1;
 
     setExpanded(!expanded);

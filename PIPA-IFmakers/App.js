@@ -50,7 +50,7 @@ export default function App() {
               </View>
             ),
             headerStyle: {
-              backgroundColor: interpolatedColor, // Cor animada em loop
+              backgroundColor: interpolatedColor,
             },
             headerTintColor: '#28a745',
           }}
