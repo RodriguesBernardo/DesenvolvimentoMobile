@@ -48,7 +48,7 @@ const HomeScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.titulo}>Bem-vindo ao aplicativo do PIPA IFMakerRS</Text>
-      <Text style={styles.subtitulo}>Selecione uma opção:</Text>
+      <Text style={styles.subtitulo}>Selecione uma opção para iniciar:</Text>
 
       {cards.map((card) => (
         <TouchableOpacity
