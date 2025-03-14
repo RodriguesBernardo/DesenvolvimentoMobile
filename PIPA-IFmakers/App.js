@@ -62,5 +62,6 @@ export default function App() {
         <Stack.Screen name="Visitas" component={VisitasScreen} options={{ title: 'Visitas' }} />
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
