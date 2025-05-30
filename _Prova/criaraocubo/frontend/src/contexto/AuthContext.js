@@ -1,84 +1,41 @@
+<<<<<<< HEAD
 import React, { createContext, useContext, useState, useEffect } from 'react';
+=======
+import React, { createContext, useState, useContext } from 'react';
+>>>>>>> abf9f18b01a2d61299c10414c33b156715555ce7
 import api from '../servicos/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const AuthContext = createContext();
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(null);
-  const [carregando, setCarregando] = useState(true);
+  const [carregando, setCarregando] = useState(false);
 
-  useEffect(() => {
-    async function carregarUsuario() {
-      const token = await AsyncStorage.getItem('@Criar3:token');
-      const usuarioSalvo = await AsyncStorage.getItem('@Criar3:usuario');
-      
-      if (token && usuarioSalvo) {
-        api.defaults.headers.Authorization = `Bearer ${token}`;
-        setUsuario(JSON.parse(usuarioSalvo));
-      }
+  const login = async (email, senha) => {
+    try {
+      setCarregando(true);
+      const response = await api.post('/auth/login', { email, senha });
+      setUsuario(response.data.usuario);
+      localStorage.setItem('token', response.data.token);
+    } catch (erro) {
+      throw new Error(erro.response?.data?.mensagem || 'Erro ao fazer login');
+    } finally {
       setCarregando(false);
     }
-    
-    carregarUsuario();
-  }, []);
+  };
 
-  async function login(email, senha) {
-    try {
-      const response = await api.post('/auth/login', { email, senha });
-      const { token, ...usuarioData } = response.data;
-      
-      await AsyncStorage.setItem('@Criar3:token', token);
-      await AsyncStorage.setItem('@Criar3:usuario', JSON.stringify(usuarioData));
-      
-      api.defaults.headers.Authorization = `Bearer ${token}`;
-      setUsuario(usuarioData);
-      
-      return usuarioData;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function registrar(nome, email, senha, telefone) {
-    try {
-      const response = await api.post('/auth/registrar', { nome, email, senha, telefone });
-      const { token, ...usuarioData } = response.data;
-      
-      await AsyncStorage.setItem('@Criar3:token', token);
-      await AsyncStorage.setItem('@Criar3:usuario', JSON.stringify(usuarioData));
-      
-      api.defaults.headers.Authorization = `Bearer ${token}`;
-      setUsuario(usuarioData);
-      
-      return usuarioData;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function logout() {
-    await AsyncStorage.removeItem('@Criar3:token');
-    await AsyncStorage.removeItem('@Criar3:usuario');
-    delete api.defaults.headers.Authorization;
+  const logout = () => {
+    localStorage.removeItem('token');
     setUsuario(null);
-  }
-
-  const value = {
-    usuario,
-    carregando,
-    login,
-    registrar,
-    logout,
-    setUsuario
   };
 
   return (
-    <AuthContext.Provider value={value}>
-      {!carregando && children}
+    <AuthContext.Provider value={{ usuario, login, logout, carregando }}>
+      {children}
     </AuthContext.Provider>
   );
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }

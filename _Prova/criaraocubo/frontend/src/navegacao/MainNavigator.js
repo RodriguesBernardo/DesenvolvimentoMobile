@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../telas/HomeScreen';
 import PedidoFormScreen from '../telas/PedidoFormScreen';
 import MeusPedidosScreen from '../telas/MeusPedidosScreen';
-import DetalhePedidoScreen from '../telas/DetalhePedidoScreen';
+// import DetalhePedidoScreen from '../telas/DetalhePedidoScreen';
 import ContatoScreen from '../telas/ContatoScreen';
 import PerfilScreen from '../telas/PerfilScreen';
 
