@@ -27,45 +27,63 @@ const OrcamentoDetalhesScreen = ({ route }) => {
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
+  const getStatusColor = () => {
+    switch(orcamento.status) {
+      case 'pendente': return '#FFA726';
+      case 'em_analise': return '#42A5F5';
+      case 'finalizado': return '#66BB6A';
+      default: return '#9E9E9E';
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.titulo}>Detalhes do Orçamento</Text>
       
       <View style={styles.detalhes}>
-        <Text style={styles.label}>Arquivo:</Text>
-        <Text style={styles.valor}>{orcamento.nomeArquivo}</Text>
+        <View style={styles.item}>
+          <Text style={styles.label}>Arquivo:</Text>
+          <Text style={styles.valor}>{orcamento.nomeArquivo}</Text>
+        </View>
         
-        <Text style={styles.label}>Status:</Text>
-        <Text style={styles.valor}>
-          {orcamento.status === 'pendente' && 'Pendente'}
-          {orcamento.status === 'em_analise' && 'Em análise'}
-          {orcamento.status === 'finalizado' && 'Finalizado'}
-        </Text>
+        <View style={styles.item}>
+          <Text style={styles.label}>Status:</Text>
+          <View style={styles.statusContainer}>
+            <View style={[styles.statusIndicator, { backgroundColor: getStatusColor() }]} />
+            <Text style={styles.valor}>
+              {orcamento.status === 'pendente' && 'Pendente'}
+              {orcamento.status === 'em_analise' && 'Em análise'}
+              {orcamento.status === 'finalizado' && 'Finalizado'}
+            </Text>
+          </View>
+        </View>
         
         {orcamento.valor && (
-          <>
+          <View style={styles.item}>
             <Text style={styles.label}>Valor:</Text>
             <Text style={styles.valor}>
-              R$ {orcamento.valor.toFixed(2)}
+              R$ {orcamento.valor.toFixed(2).replace('.', ',')}
             </Text>
-          </>
+          </View>
         )}
         
         {orcamento.observacoes && (
-          <>
+          <View style={styles.item}>
             <Text style={styles.label}>Observações:</Text>
             <Text style={styles.valor}>{orcamento.observacoes}</Text>
-          </>
+          </View>
         )}
         
-        <Text style={styles.label}>Data de Envio:</Text>
-        <Text style={styles.valor}>{formatarData(orcamento.dataEnvio)}</Text>
+        <View style={styles.item}>
+          <Text style={styles.label}>Data de Envio:</Text>
+          <Text style={styles.valor}>{formatarData(orcamento.dataEnvio)}</Text>
+        </View>
         
         {orcamento.dataResposta && (
-          <>
+          <View style={styles.item}>
             <Text style={styles.label}>Data de Resposta:</Text>
             <Text style={styles.valor}>{formatarData(orcamento.dataResposta)}</Text>
-          </>
+          </View>
         )}
       </View>
       
@@ -80,32 +98,49 @@ const OrcamentoDetalhesScreen = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20
+    padding: 16,
+    backgroundColor: '#f5f5f5'
   },
   titulo: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#333'
+    color: '#3F51B5'
   },
   detalhes: {
     marginBottom: 20,
-    backgroundColor: '#f9f9f9',
-    padding: 15,
-    borderRadius: 8
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
+    elevation: 2
+  },
+  item: {
+    marginBottom: 12
   },
   label: {
     fontWeight: 'bold',
-    marginTop: 10,
-    color: '#333'
+    color: '#3F51B5',
+    fontSize: 14,
+    marginBottom: 4
   },
   valor: {
-    marginBottom: 10,
-    color: '#666'
+    color: '#424242',
+    fontSize: 16
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  statusIndicator: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8
   },
   botao: {
-    marginTop: 20
+    marginTop: 8,
+    backgroundColor: '#3F51B5'
   }
 });
 

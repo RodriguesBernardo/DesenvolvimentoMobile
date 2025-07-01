@@ -5,10 +5,13 @@ import {
   StyleSheet, 
   ScrollView, 
   TextInput, 
-  TouchableOpacity 
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import Button from '../../components/Button';
 import { atualizarOrcamento } from '../../services/orcamentoService';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const OrcamentoDetalhesAdminScreen = ({ route, navigation }) => {
   const { orcamento: initialOrcamento } = route.params;
@@ -43,121 +46,258 @@ const OrcamentoDetalhesAdminScreen = ({ route, navigation }) => {
     return date.toLocaleString('pt-BR');
   };
 
+  const getStatusColor = () => {
+    switch(status) {
+      case 'pendente': return '#FFA726';
+      case 'em_analise': return '#42A5F5';
+      case 'finalizado': return '#66BB6A';
+      default: return '#9E9E9E';
+    }
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>Detalhes do Orçamento</Text>
-      
-      <View style={styles.detalhes}>
-        <Text style={styles.label}>Arquivo:</Text>
-        <Text style={styles.valor}>{orcamento.nomeArquivo}</Text>
-        
-        <Text style={styles.label}>Status:</Text>
-        <View style={styles.statusContainer}>
-          <TouchableOpacity 
-            style={[styles.statusButton, status === 'pendente' && styles.statusActive]}
-            onPress={() => setStatus('pendente')}
-          >
-            <Text>Pendente</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.flex}
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.statusButton, status === 'em_analise' && styles.statusActive]}
-            onPress={() => setStatus('em_analise')}
-          >
-            <Text>Em Análise</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.statusButton, status === 'finalizado' && styles.statusActive]}
-            onPress={() => setStatus('finalizado')}
-          >
-            <Text>Finalizado</Text>
-          </TouchableOpacity>
+          <Text style={styles.titulo}>Detalhes do Orçamento</Text>
         </View>
         
-        <Text style={styles.label}>Valor (R$):</Text>
-        <TextInput
-          style={styles.input}
-          value={valor}
-          onChangeText={setValor}
-          keyboardType="numeric"
-          placeholder="Digite o valor"
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Icon name="attach-file" size={24} color="#3F51B5" />
+            <Text style={styles.cardTitle}>Arquivo</Text>
+          </View>
+          <Text style={styles.cardValue}>{orcamento.nomeArquivo}</Text>
+        </View>
+        
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Icon name="info" size={24} color="#3F51B5" />
+            <Text style={styles.cardTitle}>Status</Text>
+          </View>
+          <View style={styles.statusContainer}>
+            <TouchableOpacity 
+              style={[styles.statusButton, status === 'pendente' && styles.statusActive('pendente')]}
+              onPress={() => setStatus('pendente')}
+            >
+              <Text style={status === 'pendente' ? styles.statusTextActive : styles.statusText}>Pendente</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.statusButton, status === 'em_analise' && styles.statusActive('em_analise')]}
+              onPress={() => setStatus('em_analise')}
+            >
+              <Text style={status === 'em_analise' ? styles.statusTextActive : styles.statusText}>Em Análise</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.statusButton, status === 'finalizado' && styles.statusActive('finalizado')]}
+              onPress={() => setStatus('finalizado')}
+            >
+              <Text style={status === 'finalizado' ? styles.statusTextActive : styles.statusText}>Finalizado</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View style={styles.statusIndicatorContainer}>
+            <View style={[styles.statusIndicator, { backgroundColor: getStatusColor() }]} />
+            <Text style={styles.statusTextIndicator}>{status.replace('_', ' ').toUpperCase()}</Text>
+          </View>
+        </View>
+        
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Icon name="monetization-on" size={24} color="#3F51B5" />
+            <Text style={styles.cardTitle}>Valor (R$)</Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            value={valor}
+            onChangeText={setValor}
+            keyboardType="numeric"
+            placeholder="Digite o valor"
+            placeholderTextColor="#9E9E9E"
+          />
+        </View>
+        
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Icon name="notes" size={24} color="#3F51B5" />
+            <Text style={styles.cardTitle}>Observações</Text>
+          </View>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            value={observacoes}
+            onChangeText={setObservacoes}
+            multiline
+            placeholder="Digite observações..."
+            placeholderTextColor="#9E9E9E"
+          />
+        </View>
+        
+        <View style={styles.datesContainer}>
+          <View style={styles.dateCard}>
+            <Icon name="schedule" size={20} color="#757575" />
+            <Text style={styles.dateLabel}>Enviado em:</Text>
+            <Text style={styles.dateValue}>{formatarData(orcamento.dataEnvio)}</Text>
+          </View>
+          
+          <View style={styles.dateCard}>
+            <Icon name="update" size={20} color="#757575" />
+            <Text style={styles.dateLabel}>Resposta em:</Text>
+            <Text style={styles.dateValue}>{formatarData(orcamento.dataResposta)}</Text>
+          </View>
+        </View>
+        
+        <Button 
+          title={carregando ? "Salvando..." : "Salvar Alterações"} 
+          onPress={handleSalvar} 
+          disabled={carregando}
+          style={styles.botao}
+          icon={carregando ? null : "save"}
         />
-        
-        <Text style={styles.label}>Observações:</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          value={observacoes}
-          onChangeText={setObservacoes}
-          multiline
-          placeholder="Digite observações"
-        />
-        
-        <Text style={styles.label}>Data de Envio:</Text>
-        <Text style={styles.valor}>{formatarData(orcamento.dataEnvio)}</Text>
-        
-        <Text style={styles.label}>Data de Resposta:</Text>
-        <Text style={styles.valor}>{formatarData(orcamento.dataResposta)}</Text>
-      </View>
-      
-      <Button 
-        title={carregando ? "Salvando..." : "Salvar Alterações"} 
-        onPress={handleSalvar} 
-        disabled={carregando}
-        style={styles.botao}
-      />
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  flex: {
+    flex: 1
+  },
   container: {
-    padding: 20
+    padding: 16,
+    paddingBottom: 32,
+    backgroundColor: '#f5f5f5'
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#3F51B5',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 20,
+    elevation: 2
+  },
+  backButton: {
+    marginRight: 16
   },
   titulo: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center'
+    color: '#fff',
+    flex: 1
   },
-  detalhes: {
-    marginBottom: 20
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    elevation: 2
   },
-  label: {
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12
+  },
+  cardTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 10
+    marginLeft: 8,
+    color: '#3F51B5'
   },
-  valor: {
-    marginBottom: 10
+  cardValue: {
+    fontSize: 14,
+    color: '#424242',
+    marginBottom: 4
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 10,
-    marginBottom: 10
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: '#424242',
+    backgroundColor: '#FAFAFA'
   },
   textArea: {
-    height: 100,
+    height: 120,
     textAlignVertical: 'top'
   },
   statusContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15
+    marginBottom: 16
   },
   statusButton: {
-    padding: 8,
+    padding: 12,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
+    borderColor: '#E0E0E0',
+    borderRadius: 8,
     width: '30%',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  statusActive: {
-    backgroundColor: '#e3f2fd',
-    borderColor: '#2196f3'
+  statusActive: (status) => ({
+    backgroundColor: 
+      status === 'pendente' ? '#FFF3E0' : 
+      status === 'em_analise' ? '#E3F2FD' : '#E8F5E9',
+    borderColor: 
+      status === 'pendente' ? '#FFA726' : 
+      status === 'em_analise' ? '#42A5F5' : '#66BB6A'
+  }),
+  statusText: {
+    color: '#757575'
+  },
+  statusTextActive: {
+    fontWeight: 'bold',
+    color: '#212121'
+  },
+  statusIndicatorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8
+  },
+  statusIndicator: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 8
+  },
+  statusTextIndicator: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#757575',
+    textTransform: 'uppercase'
+  },
+  datesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16
+  },
+  dateCard: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
+    width: '48%',
+    elevation: 1
+  },
+  dateLabel: {
+    fontSize: 12,
+    color: '#757575',
+    marginTop: 4
+  },
+  dateValue: {
+    fontSize: 14,
+    color: '#424242',
+    fontWeight: '500'
   },
   botao: {
-    marginTop: 20
+    marginTop: 8,
+    backgroundColor: '#3F51B5'
   }
 });
 

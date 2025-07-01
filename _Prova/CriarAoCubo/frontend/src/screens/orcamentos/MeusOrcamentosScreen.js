@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator }
 import { obterMeusOrcamentos } from '../../services/orcamentoService';
 import CardOrcamento from '../../components/CardOrcamento';
 import { AuthContext } from '../../context/AuthContext';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const MeusOrcamentosScreen = ({ navigation }) => {
   const [orcamentos, setOrcamentos] = useState([]);
@@ -18,7 +19,6 @@ const MeusOrcamentosScreen = ({ navigation }) => {
         
         const dados = await obterMeusOrcamentos();
         
-        // Verifica se os dados são válidos antes de atualizar o estado
         if (Array.isArray(dados)) {
           setOrcamentos(dados);
         } else {
@@ -45,10 +45,17 @@ const MeusOrcamentosScreen = ({ navigation }) => {
     </TouchableOpacity>
   );
 
+  const recarregar = () => {
+    setCarregando(true);
+    setErro(null);
+    useEffect(() => {}, []);
+  };
+
   if (carregando) {
     return (
-      <View style={styles.carregando}>
-        <ActivityIndicator size="large" color="#0000ff" />
+      <View style={styles.carregandoContainer}>
+        <ActivityIndicator size="large" color="#3F51B5" />
+        <Text style={styles.carregandoTexto}>Carregando orçamentos...</Text>
       </View>
     );
   }
@@ -56,33 +63,47 @@ const MeusOrcamentosScreen = ({ navigation }) => {
   if (erro) {
     return (
       <View style={styles.container}>
-        <Text style={styles.erro}>{erro}</Text>
-        <TouchableOpacity
-          style={styles.botaoRecarregar}
-          onPress={() => {
-            setCarregando(true);
-            setErro(null);
-            useEffect(() => {}, []); // Dispara o efeito novamente
-          }}
-        >
-          <Text style={styles.textoBotao}>Tentar novamente</Text>
-        </TouchableOpacity>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.titulo}>Meus Orçamentos</Text>
+        </View>
+        
+        <View style={styles.erroContainer}>
+          <Icon name="error-outline" size={48} color="#F44336" style={styles.erroIcon} />
+          <Text style={styles.erroTexto}>{erro}</Text>
+          <TouchableOpacity
+            style={styles.botaoRecarregar}
+            onPress={recarregar}
+          >
+            <Icon name="refresh" size={20} color="#fff" style={styles.botaoIcon} />
+            <Text style={styles.botaoTexto}>Tentar novamente</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Meus Orçamentos</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.titulo}>Meus Orçamentos</Text>
+      </View>
       
       {orcamentos.length === 0 ? (
         <View style={styles.semOrcamentosContainer}>
-          <Text style={styles.semOrcamentos}>Você ainda não enviou nenhum orçamento</Text>
+          <Icon name="assignment" size={64} color="#9E9E9E" style={styles.semOrcamentosIcon} />
+          <Text style={styles.semOrcamentosTexto}>Você ainda não enviou nenhum orçamento</Text>
           <TouchableOpacity
             style={styles.botaoNovoOrcamento}
             onPress={() => navigation.navigate('EnviarOrcamento')}
           >
-            <Text style={styles.textoBotao}>Enviar novo orçamento</Text>
+            <Icon name="add" size={20} color="#fff" style={styles.botaoIcon} />
+            <Text style={styles.botaoTexto}>Enviar novo orçamento</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -92,7 +113,9 @@ const MeusOrcamentosScreen = ({ navigation }) => {
           keyExtractor={item => item._id || Math.random().toString()}
           contentContainerStyle={styles.lista}
           ListEmptyComponent={
-            <Text style={styles.semOrcamentos}>Nenhum orçamento encontrado</Text>
+            <View style={styles.semOrcamentosContainer}>
+              <Text style={styles.semOrcamentosTexto}>Nenhum orçamento encontrado</Text>
+            </View>
           }
         />
       )}
@@ -103,58 +126,91 @@ const MeusOrcamentosScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#f5f5f5'
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#3F51B5',
+    padding: 16,
+    elevation: 2
+  },
+  backButton: {
+    marginRight: 16
+  },
   titulo: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#333'
+    color: '#fff',
+    flex: 1
   },
   lista: {
-    paddingBottom: 20
+    padding: 16
   },
-  carregando: {
+  carregandoContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f5f5'
   },
+  carregandoTexto: {
+    marginTop: 16,
+    color: '#757575'
+  },
   semOrcamentosContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 32
   },
-  semOrcamentos: {
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#666',
-    fontSize: 16
+  semOrcamentosIcon: {
+    marginBottom: 16
   },
-  erro: {
+  semOrcamentosTexto: {
     textAlign: 'center',
-    color: '#ff0000',
-    marginBottom: 20,
-    fontSize: 16
+    color: '#757575',
+    fontSize: 16,
+    marginBottom: 24
+  },
+  erroContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32
+  },
+  erroIcon: {
+    marginBottom: 16
+  },
+  erroTexto: {
+    textAlign: 'center',
+    color: '#F44336',
+    fontSize: 16,
+    marginBottom: 24
   },
   botaoRecarregar: {
-    backgroundColor: '#2196F3',
-    padding: 15,
-    borderRadius: 5,
-    alignSelf: 'center'
+    backgroundColor: '#3F51B5',
+    padding: 12,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 200
   },
   botaoNovoOrcamento: {
     backgroundColor: '#4CAF50',
-    padding: 15,
-    borderRadius: 5,
-    marginTop: 20
+    padding: 12,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 200
   },
-  textoBotao: {
+  botaoIcon: {
+    marginRight: 8
+  },
+  botaoTexto: {
     color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center'
+    fontWeight: 'bold'
   }
 });
 
